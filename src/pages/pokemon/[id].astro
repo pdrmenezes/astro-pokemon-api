@@ -1,0 +1,53 @@
+---
+import Layout from "../../components/Layout.astro";
+// export async function getStaticPaths() {
+//   const res = await fetch('http://localhost:8080/pokemon.json');
+//   const pokemons = await res.json();
+//   return pokemons.map(pokemon => ({
+//     params: {
+//       id: pokemon.id.toString()
+//     },
+//     props: {
+//       pokemon
+//     }
+//   }))
+// } 
+
+const res = await fetch('http://localhost:8080/pokemon.json');
+const pokemons = await res.json();
+
+const pokemon = pokemons.find(pokemon => pokemon.id === +Astro.params.id);
+
+---
+<Layout name={pokemon.name} >
+  <div class="flex gap-2">
+    <div class="max-w-md">
+      <img
+        src={`http://localhost:8080/pokemon/${pokemon.name.toLowerCase()}.jpg`}
+        alt={pokemon.name}
+        class="w-full"
+      />
+    </div>
+    <div>
+      <h1 class="font-bold text-5xl mb-2">{pokemon.name}</h1>
+      <div class="italic text-xl">{pokemon.type.join(", ")}</div>
+      <div
+        class="grid"
+        style="grid-template-columns: 1fr 1fr;"
+      >
+        <div class="font-bold mr-4">HP</div>
+        <div>{pokemon.hp}</div>
+        <div class="font-bold mr-4">Speed</div>
+        <div>{pokemon.speed}</div>
+        <div class="font-bold mr-4">Attack</div>
+        <div>{pokemon.attack}</div>
+        <div class="font-bold mr-4">Special Attack</div>
+        <div>{pokemon.special_attack}</div>
+        <div class="font-bold mr-4">Defense</div>
+        <div>{pokemon.defense}</div>
+        <div class="font-bold mr-4">Special Defense</div>
+        <div>{pokemon.special_defense}</div>
+      </div>
+    </div>
+  </div>
+</Layout>

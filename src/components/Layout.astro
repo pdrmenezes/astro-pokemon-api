@@ -1,0 +1,13 @@
+<div class="mx-auto max-w-7xl">
+  <header class="p-5 mb-2 bg-blue-700 text-white text-3xl font-bold">
+    <a href="/">
+      <!-- the pokemon data will come as an astro prop -->
+      Pokemon{Astro.props.name ? ` - ${Astro.props.name}` : ""}
+    </a>
+  </header>
+
+  <div>
+<!-- <slot /> is equal to {children} in astro context, which means the content will go where the <slot /> tag is when wrapping some context with the Layout tag -->
+  <slot />
+</div>
+</div>

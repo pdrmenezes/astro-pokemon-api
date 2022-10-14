@@ -1,0 +1,32 @@
+---
+import PokemonCard from "../components/PokemonCard";
+import Layout from "../components/Layout.astro";
+
+const res = await fetch("http://localhost:8080/pokemon.json");
+const pokemons = await res.json();
+
+const q = Astro.url.searchParams.get("q")?.toLowerCase() ?? "";
+const filteredPokemon = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(q));
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	</head>
+	<Layout>
+		<form>
+			<input type="text" name="q" value={q} class="p-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-xl" placeholder="Search" />
+		</form> 
+		<div class="grid grid-cols-3 gap-5 mt-3">
+			{filteredPokemon.slice(0,10).map(pokemon => (
+				<a href={`/pokemon/${pokemon.id}`}>
+					<PokemonCard pokemon={pokemon} />
+				</a>
+				))}
+		</div>
+	</Layout>
+</html>
