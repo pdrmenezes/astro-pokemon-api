@@ -28,7 +28,7 @@ PORT=8080 npx serve
 const q = Astro.url.searchParams.get("q")?.toLowerCase() ?? "";
 ```
 
-- As Astro uses static pages on the client-side as one way to work faster, to implement dynamic content and make astro do Server-Side Rendering we'll output it to server instead of static and add an adapter such as node (check the astro.config.mjs after befor and after adding "node" to the project to visualize it)
+- As Astro uses static pages on the client-side as one way to work faster, to implement dynamic content and make astro do Server-Side Rendering we'll output it to server instead of static and add an adapter such as node (check the astro.config.mjs before and after adding "node" to the project to visualize it)
 
 ```
 npx astro add node

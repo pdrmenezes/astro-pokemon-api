@@ -1,25 +1,79 @@
 ---
+import type {
+  GetStaticPaths,
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+} from "astro";
 import Layout from "../../components/Layout.astro";
+import type { Pokemon } from "../../types";
+
 // export async function getStaticPaths() {
-//   const res = await fetch('http://localhost:8080/pokemon.json');
+//   const res = await fetch("http://localhost:8080/pokemon.json");
 //   const pokemons = await res.json();
-//   return pokemons.map(pokemon => ({
-//     params: {
-//       id: pokemon.id.toString()
-//     },
-//     props: {
-//       pokemon
-//     }
-//   }))
-// } 
+//   return pokemons.map((pokemon: Pokemon) => ({
+//       params: { id: pokemon.id.toString() },
+//       props: { pokemon: pokemon },
+//     })
+//   );
+// }
 
-const res = await fetch('http://localhost:8080/pokemon.json');
-const pokemons = await res.json();
+export const getStaticPaths = (async () => {
+  const res = await fetch("http://localhost:8080/pokemon.json");
+  const pokemons = await res.json();
+  console.log(pokemons);
+  
+  return pokemons.map((pokemon: Pokemon) => {
+    console.log({pokemon});
+    
+    return {
+      params: { id: pokemon.id.toString() },
+      props: { pokemon },
+    }}
+  );
+}) satisfies GetStaticPaths;
 
-const pokemon = pokemons.find(pokemon => pokemon.id === +Astro.params.id);
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
+// const res = await fetch('http://localhost:8080/pokemon.json');
+// const pokemons = await res.json();
+// const pokemon = pokemons.find(pokemon => pokemon.id === +Astro.params.id);
+
+const { id } = Astro.params as Params;
+const { pokemon } = Astro.props as Props;
 ---
-<Layout name={pokemon.name} >
+
+<Layout name={pokemon.name}>
+  <div class="flex gap-2">
+    <div class="max-w-md">
+      <img
+        src={`http://localhost:8080/pokemon/${pokemon.name.toLowerCase()}.jpg`}
+        alt={pokemon.name}
+        class="w-full"
+      />
+    </div>
+    <div>
+      <h1 class="font-bold text-5xl mb-2">{pokemon.name}</h1>
+      <div class="italic text-xl">{pokemon.type}</div>
+      <div class="grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="font-bold mr-4">HP</div>
+        <div>{pokemon.hp}</div>
+        <div class="font-bold mr-4">Speed</div>
+        <div>{pokemon.speed}</div>
+        <div class="font-bold mr-4">Attack</div>
+        <div>{pokemon.attack}</div>
+        <div class="font-bold mr-4">Special Attack</div>
+        <div>{pokemon.special_attack}</div>
+        <div class="font-bold mr-4">Defense</div>
+        <div>{pokemon.defense}</div>
+        <div class="font-bold mr-4">Special Defense</div>
+        <div>{pokemon.special_defense}</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<!-- <Layout name={pokemon.name} >
   <div class="flex gap-2">
     <div class="max-w-md">
       <img
@@ -50,4 +104,4 @@ const pokemon = pokemons.find(pokemon => pokemon.id === +Astro.params.id);
       </div>
     </div>
   </div>
-</Layout>
+</Layout> -->
